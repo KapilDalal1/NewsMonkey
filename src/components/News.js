@@ -1,8 +1,23 @@
 import React, { Component } from 'react'
 import Newsitem from './Newsitem'
 import Spinner from './Spinner';
+import PropTypes from 'prop-types'
 
 export class News extends Component {
+  static defaultProps = {
+    country : 'in',
+    pageSize : 8,
+    category : 'technology'
+  }
+
+  static propTypes = {
+    country : PropTypes.string,
+    category : PropTypes.string
+
+  }
+
+
+
   constructor() {
     super();
     this.state={
@@ -15,7 +30,7 @@ export class News extends Component {
 
   async componentDidMount(element){
     
-    let url = `https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=799ef0a026c8409893e84d02bc528744&page=1&pageSize=${this.props.pageSize}`
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=799ef0a026c8409893e84d02bc528744&page=1&pageSize=${this.props.pageSize}`
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData);
@@ -60,7 +75,7 @@ export class News extends Component {
         <div className="row">
         {!this.state.loading && this.state.article.map((element) =>{
          return <div className="col-md-4" key={element.url}>
-          <Newsitem title={element.title?element.title:""} desciption = {element.desciption?element.description:""} imageUrl = {element.urlToImage} newsUrl ={element.url}/>
+          <Newsitem title={element.title?element.title:""} desciption = {element.desciption?element.description:""} imageUrl = {element.urlToImage} newsUrl ={element.url} author={element.author} date={element.publishedAt} source = {element.source.name}/>
         </div>
         })}
         </div>
